@@ -1,0 +1,122 @@
+Database Design:
+
+WorkerTypes Table
+
+WorkerTypeID int
+WorkerTypeName varchar(50)
+
+
+workers Table
+
+WorkerID int
+FirstName varchar(30)
+LastName varchar(50)
+Address1 varchar(100)
+WorkerTypeID int
+
+
+Employees Table
+
+WorkerID int
+PayPerHour decimal(5,2)
+
+Supervisors Table
+
+WorkerID int
+AnnualSalary decimal(10,2)
+
+Managers Table
+
+WorkerID int
+AnnualSalary decimal(10, 2)
+MaxExpenseAmount decimal(10, 2)
+
+
+Web API Design:
+
+public class EmployeeDto
+{
+	public int WorkerTypeID {get;set;}
+	public string WorkerTypeName {get;set;}
+	public int WorkerID {get;set;}
+	public string FirstName{get;set;}
+	public string LastName {get;set;}
+	public string Address1 {get;set;}
+	public decimal? PayPerHour {get;set;}
+	public decimal? AnnualSalary {get;set;}
+	public decimal? MaxExpenseAmount {get;set;}
+}
+
+public class CreateEmployeeDto
+{
+	public int WorkerTypeID {get;set;}
+	public string FirstName{get;set;}
+	public string LastName {get;set;}
+	public string Address1 {get;set;}
+	public decimal? PayPerHour {get;set;}
+	public decimal? AnnualSalary {get;set;}
+	public decimal? MaxExpenseAmount {get;set;}
+}
+
+
+API Interface Design:
+
+List<EmployeeDto> GetAllEmployees();
+EmployeeDto AddNewEmployee(CreateEmployeeDto createEmployeeDto);
+
+
+Database query for getting all employees:
+
+Select wt.WorkerTypeID, wt.WorkerTypeName, w.FirstName, w.LastName, w.Address1, e.PayPerHour, NULL as AnnualSalary, NULL as MaxExpenseAmount
+From Workers w 
+Join WorkerTypes wt
+On w.WorkerTypeID = wt.WorkerTypeID
+Join Employees e
+On w.WorkerID = e.WorkerID
+
+Union
+
+Select wt.WorkerTypeID, wt.WorkerTypeName, w.FirstName, w.LastName, w.Address1, NULL as PayPerHour, s.AnnualSalary, NULL as MaxExpenseAmount
+From Workers w 
+Join WorkerTypes wt
+On w.WorkerTypeID = wt.WorkerTypeID
+Join Supervisors s
+On w.WorkerID = s.WorkerID
+
+Union
+
+Select wt.WorkerTypeID, wt.WorkerTypeName, w.FirstName, w.LastName, w.Address1, NULL as PayPerHour, m.AnnualSalary, m.MaxExpenseAmount
+From Workers w 
+Join WorkerTypes wt
+On w.WorkerTypeID = wt.WorkerTypeID
+Join Managers m
+On w.WorkerID = m.WorkerID
+
+Database query for Add new Employee:
+
+pseudo code of SQL
+
+Create Procedure AddNewEmployee
+@WorkerTypeID int,
+@FirstName varchar(30),
+@LastName varchar(50),
+@Address1 varchar(100),
+@PayPerHour decimal(5,2) = NULL,
+@AnnualSalary decimal(10, 2) = NULL,
+@MaxExpenseAmount decimal(10, 2)= NULL,
+@WorkerID int OUTPUT
+AS
+Begin
+	
+		Insert Into Workers
+		Set @WorkerID = Scope_Identity();
+		if @WorkerTypeID = 1 
+			Insert into Employees
+		else if @WorkerTypeID = 2
+			Insert into Supervisors
+		else if @WorkerTypeID = 3
+			Insert into Managers
+
+	
+End
+
