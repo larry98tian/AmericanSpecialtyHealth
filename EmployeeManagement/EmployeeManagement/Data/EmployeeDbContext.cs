@@ -8,5 +8,6 @@ namespace EmployeeManagement.Data
         public DbSet<WorkerType> WorkerTypes { get; set; }
         public DbSet<Worker> Workers { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Supervisor> Supervisors { get; set; }
     }
 }
