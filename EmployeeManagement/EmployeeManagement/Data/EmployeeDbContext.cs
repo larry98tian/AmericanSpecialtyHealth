@@ -7,5 +7,6 @@ namespace EmployeeManagement.Data
         public EmployeeDbContext(DbContextOptions options) : base(options) { }
         public DbSet<WorkerType> WorkerTypes { get; set; }
         public DbSet<Worker> Workers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
