@@ -19,4 +19,8 @@
     <ProjectReference Include="..\EmployeeManagement.DTO\EmployeeManagement.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SQLScripts\" />
+  </ItemGroup>
+
 </Project>
